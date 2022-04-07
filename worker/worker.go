@@ -1,5 +1,7 @@
 package worker
 
-func Main(addr string) {
+import "fmt"
 
+func Main(addr string) {
+	fmt.Println("This is the worker, yo!")
 }
