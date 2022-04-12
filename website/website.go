@@ -28,6 +28,11 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 			SignalStrength: -10,
 			SSID:           "NSA Van #8",
 		},
+		{
+			Speed:          51.0,
+			SignalStrength: -20,
+			SSID:           "CEDAR_IOT",
+		},
 	}
 
 	mStruct := make(map[string]any)

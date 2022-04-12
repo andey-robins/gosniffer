@@ -10,18 +10,37 @@
 <body>
 
 <section class="cyberpunk">
-    <h1 class="cyberpunk glitched black" style="width:80%;">CEDAR WiFi Sniffer</h1>
+    <h1 class="cyberpunk glitched black" style="width:75%;">CEDAR WiFi Sniffer</h1>
 </section>
 
-<h1>Header</h1>
-<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis, iste ut aliquam, magnam ab animi ipsum repellendus vel recusandae optio provident ad cum impedit non consectetur. Hic placeat exercitationem officiis.</p>
+<!-- <section class="cyberpunk black">
+    <table>
+        <tr>
+            <td style="width:50%;">
+                <p class="cyberpunk inverse dotted scannedh"><b>What is this?</b><br>
+                    This page shows all the different wifi networks that are being looked for by all the devices around us. When a wifi device is not connected to its favorite network it sends out a broadcast looking for all the different wifi networks it has connected to in the past. This information can be used in conjunction with a war-driving database which is a database of wifi signal names and their geographic location. This can be dangerous information if used by the wrong people as it can provide a map of your favorite hangout spots. <br>
+                </p>
+            </td>
+            <td>
+                <p class="cyberpunk inverse dotted scannedh">
+                    <b>How do I fix this?</b><br>
+                    - Check your wifi settings to see if you have a randomized network name setting <br>
+                    - Delete any remembered networks that you rarely connect to <br>
+                    - Turn off wifi when you know you're not trying to connect to one <br>
+                </p>
+            </td>
 
-<h2>Found Elements</h2>
-<ul>
-{{range .Networks}}
-    <li>{{.SSID}} -- {{.Speed}} MB/s</li>
-    <br />
-{{end}}
-<ul>
+        </tr>
+    </table>
+</section> -->
+
+<table id="wifitable" style="width:100%;">
+    <ul>
+        {{range .Networks}}
+            <li class="cyberpunk">{{.SSID}} -- {{.Speed}} MB/s -- {{.SignalStrength}} dbm</li>
+            <br />
+        {{end}}
+        <ul>
+</table>
 </body>
 </html>
