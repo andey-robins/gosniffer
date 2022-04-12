@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wifi Sniffer Results</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta http-equiv="refresh" content="10">
+    <link href="https://fonts.googleapis.com/css2?family=Advent+Pro:wght@200;300;500;600;700&display=swap" rel="stylesheet">
+    <link href="/resources/css/cyberpunk.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+
+<section class="cyberpunk">
+    <h1 class="cyberpunk glitched black" style="width:80%;">CEDAR WiFi Sniffer</h1>
+</section>
+
+<h1>Header</h1>
+<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis, iste ut aliquam, magnam ab animi ipsum repellendus vel recusandae optio provident ad cum impedit non consectetur. Hic placeat exercitationem officiis.</p>
+
+<h2>Found Elements</h2>
+<ul>
+{{range .Networks}}
+    <li>{{.SSID}} -- {{.Speed}} MB/s</li>
+    <br />
+{{end}}
+<ul>
+</body>
+</html>
