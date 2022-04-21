@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"text/template"
+	"time"
 
 	"github.com/andey-robins/gosniffer/sniffer"
 )
@@ -14,6 +15,7 @@ func Main() {
 	fileServer := http.FileServer(http.Dir("./website/css"))
 	http.Handle("/resources/css/cyberpunk.css", http.StripPrefix("/resources/css", fileServer))
 	http.HandleFunc("/", mainHandler)
+	log.Println("Started listening on :8000")
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }
 
@@ -24,14 +26,22 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 
 	Networks := []sniffer.NetworkNode{
 		{
-			Speed:          5.0,
-			SignalStrength: -10,
-			SSID:           "NSA Van #8",
+			StationMac:  "01:23:45:67:89:cd",
+			FirstSeen:   time.Now(),
+			LastSeen:    time.Now(),
+			Power:       -8,
+			PacketCount: 12,
+			BSSID:       "(not associated)",
+			ESSID:       "NSA Van #8",
 		},
 		{
-			Speed:          51.0,
-			SignalStrength: -20,
-			SSID:           "CEDAR_IOT",
+			StationMac:  "01:23:45:67:89:ab",
+			FirstSeen:   time.Now(),
+			LastSeen:    time.Now(),
+			Power:       -10,
+			PacketCount: 10,
+			BSSID:       "(not associated)",
+			ESSID:       "NSA Van #9",
 		},
 	}
 

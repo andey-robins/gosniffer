@@ -34,13 +34,12 @@
     </table>
 </section> -->
 
-<table id="wifitable" style="width:100%;">
-    <ul>
+<section class="cyberpunk black">
+    <table id="wifitable" style="width:100%;">
         {{range .Networks}}
-            <li class="cyberpunk">{{.SSID}} -- {{.Speed}} MB/s -- {{.SignalStrength}} dbm</li>
-            <br />
+            <tr><td><p class="cyberpunk inverted dotted">{{.ESSID}} -- {{.LastSeen}} -- {{.Power}} dbm</p></td></tr>
         {{end}}
-        <ul>
-</table>
+    </table>
+</section>
 </body>
 </html>
