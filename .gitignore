@@ -10,7 +10,10 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+*.csv
+*.db
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
 .vscode/
+python_dependency/tcpdumpoutput/myOutput-01.csv

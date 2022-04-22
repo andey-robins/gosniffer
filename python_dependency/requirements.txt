@@ -1,0 +1,5 @@
+scapy
+pandas
+pyrcrack
+netifaces
+aiofiles
