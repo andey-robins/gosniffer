@@ -1,7 +1,13 @@
 package sniffer
 
+import "time"
+
 type NetworkNode struct {
-	Speed          float64
-	SignalStrength int64
-	SSID           string
+	StationMac  string    `csv:"Station MAC"`
+	FirstSeen   time.Time `csv:"First time seen"`
+	LastSeen    time.Time `csv:"Last time seen"`
+	Power       int       `csv:"Power"`
+	PacketCount int       `csv:"# packets"`
+	BSSID       string    `csv:"BSSID"`
+	ESSID       string    `csv:"Probed ESSIDs"`
 }
