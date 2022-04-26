@@ -3,26 +3,25 @@
 <head>
     <title>Wifi Sniffer Results</title>
     <meta name="viewport" content="width=device-width,minimum-scale=1">
-    <meta http-equiv="refresh" content="10">
     <link href="https://fonts.googleapis.com/css2?family=Advent+Pro:wght@200;300;500;600;700&display=swap" rel="stylesheet">
     <link href="/resources/css/cyberpunk.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 
-<section class="cyberpunk">
+<section id="top" class="cyberpunk">
     <h1 class="cyberpunk glitched black" style="width:75%;">CEDAR WiFi Sniffer</h1>
 </section>
 
-<!-- <section class="cyberpunk black">
+<section class="cyberpunk">
     <table>
         <tr>
             <td style="width:50%;">
-                <p class="cyberpunk inverse dotted scannedh"><b>What is this?</b><br>
+                <p class="cyberpunk dotted scannedh"><b>What is this?</b><br>
                     This page shows all the different wifi networks that are being looked for by all the devices around us. When a wifi device is not connected to its favorite network it sends out a broadcast looking for all the different wifi networks it has connected to in the past. This information can be used in conjunction with a war-driving database which is a database of wifi signal names and their geographic location. This can be dangerous information if used by the wrong people as it can provide a map of your favorite hangout spots. <br>
                 </p>
             </td>
             <td>
-                <p class="cyberpunk inverse dotted scannedh">
+                <p class="cyberpunk dotted scannedh">
                     <b>How do I fix this?</b><br>
                     - Check your wifi settings to see if you have a randomized network name setting <br>
                     - Delete any remembered networks that you rarely connect to <br>
@@ -32,14 +31,49 @@
 
         </tr>
     </table>
-</section> -->
+</section>
 
 <section class="cyberpunk black">
-    <table id="wifitable" style="width:100%;">
+    <table id="wifitable" style="width:100%; overflow: scroll; height: 50px;">
         {{range .Networks}}
-            <tr><td><p class="cyberpunk inverted dotted">{{.ESSID}} -- {{.LastSeen}} -- {{.Power}} dbm</p></td></tr>
+            <tr>
+                <td class="cyberpunk dotted" style="color: black !important; padding: 15px 15px 15px 15px;">
+                    <h2 style="font-weight: bold; color: black !important">{{.ESSID}}</h2>
+                </td>
+                <td class="cyberpunk dotted" style="color: black !important; padding: 15px 15px 15px 15px;">
+                    <span style="font-weight: bold;">Last Seen  </span><span>{{.LastSeen}}</span><br>
+                    <span style="font-weight: bold;">Station MAC  </span><span>{{.StationMac}}</span><br>
+                    <span>{{.PacketCount}} packets seen</span>
+                </td>
+            </tr>
         {{end}}
     </table>
 </section>
+
+<div id="bottom">
+    <footer style="background-color: #000; height: 50px;position:absolute;bottom:0%">c 2022 CEDAR</footer>
+</div>
+
+<script>
+    const scrollTop = () => {
+        document.getElementById('top').scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
+        setTimeout(scrollBottom, 10000)
+    };
+
+    const scrollBottom = () => {
+        document.getElementById('bottom').scrollIntoView({
+            behavior: "smooth",
+            block: "end",
+        });
+        setTimeout(scrollTop, 10000)
+    };
+
+    scrollBottom();
+
+</script>
+
 </body>
 </html>
