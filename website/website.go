@@ -6,7 +6,6 @@ import (
 	"os"
 	"path/filepath"
 	"text/template"
-	"time"
 
 	"github.com/andey-robins/gosniffer/sniffer"
 )
@@ -27,55 +26,43 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	Networks := []sniffer.NetworkNode{
 		{
 			StationMac:  "01:23:45:67:89:cd",
-			FirstSeen:   time.Unix(10, 10),
-			LastSeen:    time.Unix(10, 10),
-			Power:       -8,
-			PacketCount: 12,
+			Power:       "-8",
+			PacketCount: "12",
 			BSSID:       "(not associated)",
 			ESSID:       "NSA Van #8",
 		},
 		{
 			StationMac:  "01:23:45:67:89:ab",
-			FirstSeen:   time.Unix(10, 10),
-			LastSeen:    time.Unix(10, 10),
-			Power:       -10,
-			PacketCount: 10,
+			Power:       "-10",
+			PacketCount: "10",
 			BSSID:       "(not associated)",
 			ESSID:       "NSA Van #9",
 		},
 		{
 			StationMac:  "01:23:d5:67:89:cd",
-			FirstSeen:   time.Unix(10, 10),
-			LastSeen:    time.Unix(10, 10),
-			Power:       -8,
-			PacketCount: 12,
+			Power:       "-8",
+			PacketCount: "12",
 			BSSID:       "(not associated)",
 			ESSID:       "NSA Van #8",
 		},
 		{
 			StationMac:  "01:f3:45:67:89:ab",
-			FirstSeen:   time.Unix(10, 10),
-			LastSeen:    time.Unix(10, 10),
-			Power:       -10,
-			PacketCount: 10,
+			Power:       "-10",
+			PacketCount: "10",
 			BSSID:       "(not associated)",
 			ESSID:       "NSA Van #9",
 		},
 		{
 			StationMac:  "01:23:45:c7:89:cd",
-			FirstSeen:   time.Unix(10, 10),
-			LastSeen:    time.Unix(10, 10),
-			Power:       -8,
-			PacketCount: 12,
+			Power:       "-8",
+			PacketCount: "12",
 			BSSID:       "(not associated)",
 			ESSID:       "NSA Van #8",
 		},
 		{
 			StationMac:  "01:23:45:a7:89:ab",
-			FirstSeen:   time.Unix(10, 10),
-			LastSeen:    time.Unix(10, 10),
-			Power:       -10,
-			PacketCount: 10,
+			Power:       "-10",
+			PacketCount: "10",
 			BSSID:       "(not associated)",
 			ESSID:       "NSA Van #9",
 		},
