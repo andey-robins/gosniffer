@@ -2,6 +2,7 @@ package website
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -12,12 +13,12 @@ import (
 	"github.com/andey-robins/gosniffer/sniffer"
 )
 
-func Main() {
+func Main(port string) {
 	fileServer := http.FileServer(http.Dir("./website/css"))
 	http.Handle("/resources/css/cyberpunk.css", http.StripPrefix("/resources/css", fileServer))
 	http.HandleFunc("/", mainHandler)
-	log.Println("Started listening on :8000")
-	log.Fatal(http.ListenAndServe(":8000", nil))
+	log.Printf("Started listening on :%v", port)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", port), nil))
 }
 
 func mainHandler(w http.ResponseWriter, r *http.Request) {

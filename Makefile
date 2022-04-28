@@ -1,7 +1,7 @@
 .PHONY: web server worker build
 
 web:
-	RUNNING_MODE=web SERVER_IP=localhost:8080 go run main.go
+	RUNNING_MODE=web SERVER_IP=localhost:8080 PORT=80 go run main.go
 
 server:
 	RUNNING_MODE=server go run main.go

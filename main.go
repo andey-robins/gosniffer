@@ -25,7 +25,8 @@ func main() {
 }
 
 func startHttp() {
-	website.Main()
+	port := os.Getenv("PORT")
+	website.Main(port)
 }
 
 func startServer() {
