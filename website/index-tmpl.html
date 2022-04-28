@@ -3,6 +3,7 @@
 <head>
     <title>Wifi Sniffer Results</title>
     <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta http-equiv="refresh" content="10" >
     <link href="https://fonts.googleapis.com/css2?family=Advent+Pro:wght@200;300;500;600;700&display=swap" rel="stylesheet">
     <link href="/resources/css/cyberpunk.css" type="text/css" rel="stylesheet">
 </head>
@@ -41,7 +42,7 @@
                     <h2 style="font-weight: bold; color: black !important">{{.ESSID}}</h2>
                 </td>
                 <td class="cyberpunk dotted" style="color: black !important; padding: 15px 15px 15px 15px;">
-                    <span style="font-weight: bold;">Last Seen  </span><span>{{.LastSeen}}</span><br>
+                    <span style="font-weight: bold;">Power  </span><span>{{.Power}}</span><br>
                     <span style="font-weight: bold;">Station MAC  </span><span>{{.StationMac}}</span><br>
                     <span>{{.PacketCount}} packets seen</span>
                 </td>
@@ -54,13 +55,13 @@
     <footer style="background-color: #000; height: 50px;position:absolute;bottom:0%">c 2022 CEDAR</footer>
 </div>
 
-<script>
+<!-- <script>
     const scrollTop = () => {
         document.getElementById('top').scrollIntoView({
             behavior: "smooth",
             block: "start",
         });
-        setTimeout(scrollBottom, 10000)
+        setTimeout(() => window.location.reload(), 10000)
     };
 
     const scrollBottom = () => {
@@ -73,7 +74,7 @@
 
     scrollBottom();
 
-</script>
+</script> -->
 
 </body>
 </html>

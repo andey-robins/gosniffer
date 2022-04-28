@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 
@@ -26,13 +27,55 @@ func GetSearch(c *gin.Context) {
 
 }
 
-// PostRegister is invoked by the /register endpoint. TODO: Write this
+// GetStartup is invoked by the /startup endpoint.
+func GetStartup(c *gin.Context) {
+	db := db.Connect()
+	rows, err := db.Db.Query("SELECT * FROM networks;")
+	defer rows.Close()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	resp := make([]sniffer.NetworkNode, 0)
+
+	for rows.Next() {
+		var node sniffer.NetworkNode
+		var uid int
+		err := rows.Scan(&uid, &node.StationMac, &node.Power, &node.PacketCount, &node.BSSID, &node.ESSID)
+		if err != nil {
+			log.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+		resp = append(resp, node)
+	}
+
+	data, err := json.Marshal(resp)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.Data(http.StatusOK, "application/json", data)
+}
+
+// PostRegister is invoked by the /register endpoint. Sending a json representation of a data struct
+// will dump it into the database
 func PostRegister(c *gin.Context) {
 	var registration sniffer.NetworkNode
 	if err := c.ShouldBindJSON(&registration); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err,
 		})
+		return
 	}
 
 	db := db.Connect()
@@ -47,6 +90,7 @@ func PostRegister(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err,
 		})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{

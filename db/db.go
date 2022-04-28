@@ -39,25 +39,3 @@ func Connect() *Database {
 
 	return instance
 }
-
-// Query takes the question mark encoded string and all subsequent values
-func (d *Database) Query(qStr string, vals ...any) (sql.Result, error) {
-
-	tx, err := d.Db.Begin()
-	if err != nil {
-		return nil, err
-	}
-
-	stmt, err := tx.Prepare(qStr)
-	if err != nil {
-		return nil, err
-	}
-	defer stmt.Close()
-	res, err := stmt.Exec(vals)
-	if err != nil {
-		return nil, err
-	}
-	tx.Commit()
-
-	return res, nil
-}

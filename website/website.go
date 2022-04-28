@@ -1,6 +1,8 @@
 package website
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -23,49 +25,26 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	p := filepath.Join(cwd, "website", "index-tmpl.html")
 	t := template.Must(template.ParseFiles(p))
 
-	Networks := []sniffer.NetworkNode{
-		{
-			StationMac:  "01:23:45:67:89:cd",
-			Power:       "-8",
-			PacketCount: "12",
-			BSSID:       "(not associated)",
-			ESSID:       "NSA Van #8",
-		},
-		{
-			StationMac:  "01:23:45:67:89:ab",
-			Power:       "-10",
-			PacketCount: "10",
-			BSSID:       "(not associated)",
-			ESSID:       "NSA Van #9",
-		},
-		{
-			StationMac:  "01:23:d5:67:89:cd",
-			Power:       "-8",
-			PacketCount: "12",
-			BSSID:       "(not associated)",
-			ESSID:       "NSA Van #8",
-		},
-		{
-			StationMac:  "01:f3:45:67:89:ab",
-			Power:       "-10",
-			PacketCount: "10",
-			BSSID:       "(not associated)",
-			ESSID:       "NSA Van #9",
-		},
-		{
-			StationMac:  "01:23:45:c7:89:cd",
-			Power:       "-8",
-			PacketCount: "12",
-			BSSID:       "(not associated)",
-			ESSID:       "NSA Van #8",
-		},
-		{
-			StationMac:  "01:23:45:a7:89:ab",
-			Power:       "-10",
-			PacketCount: "10",
-			BSSID:       "(not associated)",
-			ESSID:       "NSA Van #9",
-		},
+	resp, err := http.Get("http://localhost:8080/startup")
+	if err != nil {
+		log.Printf("Error in request to home server: %v\n", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Printf("Error in reading body: %v\n", err)
+		return
+	}
+
+	log.Println(string(body))
+
+	Networks := make([]sniffer.NetworkNode, 0)
+	err = json.Unmarshal(body, &Networks)
+	if err != nil {
+		log.Printf("Error in unmarshalling json: %v\n", err)
+		return
 	}
 
 	mStruct := make(map[string]any)

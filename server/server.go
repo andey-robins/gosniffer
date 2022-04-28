@@ -11,6 +11,7 @@ func Main() {
 	r.GET("/", api.GetRoot)
 	r.GET("/status", api.GetStatus)
 	r.GET("/search", api.GetSearch)
+	r.GET("/startup", api.GetStartup)
 	r.POST("/register", api.PostRegister)
 
 	r.Run()
