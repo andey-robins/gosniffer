@@ -31,168 +31,35 @@ See more at http://blog.squix.ch
 #include <stdlib.h>
 #include <string>
 #include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
 #include <Ticker.h>
 #include <JsonListener.h>
-//#include "SSD1306Wire.h"
-//#include "OLEDDisplayUi.h"
 #include "Wire.h"
 #include "TimeClient.h"
 
 //the structure
 class Network {
 public:
-  String  SSID;
-  int   RSSI;
-  int   channel;
-  bool encrypt;
+  String StationMac;
+  String BSSID;
+  String SSID;
   Network(){};
 };
 
 //the initialize function
-Network constructNet(String SSID, int RSSI, int channel, bool encrypt){
+Network constructNet(String StationMac, String BSSID, String SSID){
   Network foo;
-  foo.SSID = SSID;
-  foo.RSSI = RSSI;
-  foo.channel = channel;
-  foo.encrypt = encrypt;
+  foo.StationMac  = StationMac;
+  foo.BSSID       = BSSID;
+  foo.SSID       = SSID;
+
   return foo;
 }
 
-bool networkSorter(Network const& lhs, Network const& rhs) {
-  return lhs.RSSI >= rhs.RSSI; // since values are negative this is reversed?
-}
-
-void printNetArray(std::vector<Network> netArray){
-  int n = netArray.size();
-  for (int i=0; i < n; i++){
-    // String rssi = String(&netArray[i].RSSI);
-    String ssid = String(netArray[i].SSID);
-    String rssi = String(netArray[i].RSSI);
-    String channel = String(netArray[i].channel);
-    String encrypt = (netArray[i].encrypt == ENC_TYPE_NONE)?" ":"*";
-    String line = " #" + String(i) + "(" + rssi + ") " + ssid + " - " + channel + " - " + encrypt;
-    Serial.println(line);
-  }
-}
-
-Network constructNet(String SSID, int RSSI, int channel, bool encrypt);
+Network constructNet(String StationMac, String BSSID, String SSID);
 bool networkSorter(Network const& lhs, Network const& rhs);
 std::vector<Network> scan();
 void setupScan();
-
-//declaring prototypes
-//void drawProgress(OLEDDisplay *display, int percentage, String label);
-//void updateData(OLEDDisplay *display);
-//void drawNetStatus(OLEDDisplay *display);
-
-
-// Include the correct display library
-// For a connection via I2C using Wire include
-//#include "SSD1306.h" // alias for `#include "SSD1306Wire.h"`
-// or #include "SH1106.h" alis for `#include "SH1106Wire.h"`
-// For a connection via I2C using brzo_i2c (must be installed) include
-// #include <brzo_i2c.h> // Only needed for Arduino 1.6.5 and earlier
-// #include "SSD1306Brzo.h"
-// #include "SH1106Brzo.h"
-// For a connection via SPI include
-// #include <SPI.h> // Only needed for Arduino 1.6.5 and earlier
-// #include "SSD1306Spi.h"
-// #include "SH1106SPi.h"
-
-
-// Initialize the OLED display using SPI
-// D5 -> CLK
-// D7 -> MOSI (DOUT)
-// D0 -> RES
-// D2 -> DC
-// D8 -> CS
-// SSD1306Spi        display(D0, D2, D8);
-// or
-// SH1106Spi         display(D0, D2);
-
-// Initialize the OLED display using brzo_i2c
-// D3 -> SDA
-// D5 -> SCL
-// SSD1306Brzo display(0x3c, D3, D5);
-// or
-// SH1106Brzo  display(0x3c, D3, D5);
-
-// Initialize the OLED display using Wire library
-//SSD1306  display(0x3c, D3, D4);
-// SH1106 display(0x3c, D3, D5);
-
-/*
-void setup() {
-  Serial.begin(115200);
-  Serial.println();
-  Serial.println();
-
-
-  // Initialising the UI will init the display too.
-  display.init();
-  display.flipScreenVertically();
-  display.setFont(ArialMT_Plain_10);
-
-  updateData(&display);
-  display.display();
-}
-
-
-void loop() {
-  // clear the display
-  display.clear();
-  // draw the current demo method
-  drawNetStatus(&display);
-
-  display.display();
-}
-
-
-void drawProgress(OLEDDisplay *display, int percentage, String label) {
-  display->clear();
-  display->setTextAlignment(TEXT_ALIGN_CENTER);
-  display->setFont(ArialMT_Plain_10);
-  display->drawString(64, 10, label);
-  display->drawProgressBar(2, 28, 124, 10, percentage);
-  display->display();
-}
-
-void updateData(OLEDDisplay *display) {
-  drawProgress(display, 30, "Scanning Network...");
-  delay(500);
-  drawProgress(display, 80, "Herding Cats...");
-  delay(100);
-}
-
-void drawNetStatus(OLEDDisplay *display) {
-  int x=0;
-  int y=0;
-  // Get scan
-  std::vector<Network> netArray = scan();
-  // Set defaults for text
-  display->setColor(WHITE);
-  display->setFont(ArialMT_Plain_10);
-
-  // Set header
-  display->setTextAlignment(TEXT_ALIGN_CENTER);
-  String banner = "[=== (" + String(netArray.size()) + ") Networks ===]";
-  display->drawString(64, 0, banner);
-
-  // Draw the networks
-  String lineItem = "";
-  display->setTextAlignment(TEXT_ALIGN_LEFT);
-  for (int i = 0; i < 6; i++){
-    String spaces;
-    if (netArray[i].channel >= 10){
-      spaces = "  ";
-    } else {
-      spaces = "    ";
-    }
-    lineItem = String(netArray[i].RSSI) + "  " + String(netArray[i].channel) + spaces + String(netArray[i].SSID);
-    display->drawString(x, 10+y+(8*i), lineItem);
-  }
-}
-*/
 
 void setupScan(){
   Serial.begin(115200);
@@ -208,7 +75,7 @@ void setupScan(){
 std::vector<Network> populateNetArray(int n){
   std::vector<Network> netArray(n);
   for (int i=0; i < n; i++){
-    netArray[i] = constructNet(WiFi.SSID(i), WiFi.RSSI(i), WiFi.channel(i), (WiFi.encryptionType(i) == ENC_TYPE_NONE));
+    netArray[i] = constructNet(WiFi.macAddress(), WiFi.BSSIDstr(), WiFi.SSID());
   }
   return netArray;
 }
@@ -237,4 +104,66 @@ void serialDebugScan(int n){
     Serial.println(" networks found");
   }
   Serial.println("");
+}
+
+// WiFi connection and POST request were inspired by [this](https://techtutorialsx.com/2016/07/21/esp8266-post-requests/)
+void WiFi_Connect() {
+  // Establish a connection to a WiFi network
+  Serial.begin(115200);                 //Serial connection
+  WiFi.begin("yourSSID", "yourPASS");   //WiFi connection
+ 
+  while (WiFi.status() != WL_CONNECTED) {  //Wait for the WiFI connection completion
+ 
+    delay(500);
+    Serial.println("Waiting for connection");
+ 
+  }
+}
+
+void POST(Network network) {
+    if (WiFi.status() == WL_CONNECTED) { //Check WiFi connection status
+ 
+    HTTPClient http;    //Declare object of class HTTPClient
+ 
+    http.begin("http://seekdanyouwillbefound.org/register");      //Specify request destination
+    http.addHeader("Content-Type", "application/json");  //Specify content-type header
+
+    //int stationmaclen = network.StationMac.length() + 1; // Add one for the empty string we'll concat with
+
+    char emptyStr[] = "";
+ 
+    strcat(emptyStr, "mac: ");
+    strcat(emptyStr, network.StationMac.c_str());
+    strcat(emptyStr, "power: 0");
+    strcat(emptyStr, "packetCount: 0");
+    strcat(emptyStr, "bssid: ");
+    strcat(emptyStr, network.BSSID.c_str());
+    strcat(emptyStr, "essid: ");
+    strcat(emptyStr, network.SSID.c_str());
+
+    int httpCode = http.POST(emptyStr);   //Send the request
+    String payload = http.getString();                  //Get the response payload
+ 
+    Serial.println(httpCode);   //Print HTTP return code
+    Serial.println(payload);    //Print request response payload
+ 
+    http.end();  //Close connection
+ 
+  } else {
+ 
+    Serial.println("Error in WiFi connection");
+ 
+  }
+ 
+  delay(30000);  //Send a request every 30 seconds
+}
+
+void loop()
+{
+  std::vector<Network> vec;
+  vec = scan();
+  for (auto i: vec) {
+    POST(i);
+  }
+
 }
