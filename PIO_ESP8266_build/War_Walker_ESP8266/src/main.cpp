@@ -35,7 +35,7 @@ See more at http://blog.squix.ch
 #include <Ticker.h>
 #include <JsonListener.h>
 #include "Wire.h"
-#include "TimeClient.h"
+//#include "TimeClient.h"
 
 //the structure
 class Network {
@@ -51,7 +51,7 @@ Network constructNet(String StationMac, String BSSID, String SSID){
   Network foo;
   foo.StationMac  = StationMac;
   foo.BSSID       = BSSID;
-  foo.SSID       = SSID;
+  foo.SSID        = SSID;
 
   return foo;
 }
@@ -80,6 +80,18 @@ std::vector<Network> populateNetArray(int n){
   return netArray;
 }
 
+void serialDebugScan(int n){
+  Serial.println("scan done");
+  if (n == 0){
+    Serial.println("no networks found");
+  } else
+  {
+    Serial.print(n);
+    Serial.println(" networks found");
+  }
+  Serial.println("");
+}
+
 std::vector<Network> scan() {
   Serial.println("Starting Scan...");
   // WiFi.scanNetworks will return the number of networks found
@@ -94,23 +106,11 @@ std::vector<Network> scan() {
   return(netArray);
 }
 
-void serialDebugScan(int n){
-  Serial.println("scan done");
-  if (n == 0){
-    Serial.println("no networks found");
-  } else
-  {
-    Serial.print(n);
-    Serial.println(" networks found");
-  }
-  Serial.println("");
-}
-
 // WiFi connection and POST request were inspired by [this](https://techtutorialsx.com/2016/07/21/esp8266-post-requests/)
 void WiFi_Connect() {
   // Establish a connection to a WiFi network
   Serial.begin(115200);                 //Serial connection
-  WiFi.begin("yourSSID", "yourPASS");   //WiFi connection
+  WiFi.begin("Network_name", "Network_password");   //WiFi connection
  
   while (WiFi.status() != WL_CONNECTED) {  //Wait for the WiFI connection completion
  
@@ -123,9 +123,10 @@ void WiFi_Connect() {
 void POST(Network network) {
     if (WiFi.status() == WL_CONNECTED) { //Check WiFi connection status
  
-    HTTPClient http;    //Declare object of class HTTPClient
- 
-    http.begin("http://seekdanyouwillbefound.org/register");      //Specify request destination
+    WiFiClient client;    //Declare object of class HTTPClient
+    HTTPClient http;
+
+    http.begin(client, "http://seekandyouwillbefound.org/register:8080");      //Specify request destination
     http.addHeader("Content-Type", "application/json");  //Specify content-type header
 
     //int stationmaclen = network.StationMac.length() + 1; // Add one for the empty string we'll concat with
