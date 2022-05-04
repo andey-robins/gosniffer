@@ -11,6 +11,7 @@ from scapy.all import *
 from threading import Thread
 import pandas, sqlite3, netifaces
 import time, os
+import requests
 
 database_name = "../wifi_signals.db"
 
@@ -68,7 +69,19 @@ def callback(packet):
         channel = stats.get("channel")
         # get the crypto
         crypto = stats.get("crypto")
+        url = 'http://seekandyouwillbefound.org:8080/register'
+        postMe = {'mac': bssid, 'bssid': bssid, 'essid': ssid, 'power': 0, 'packetCount': 0}
+        requests.post(url, data = postMe, timeout=2.50)
         networks.loc[bssid] = (ssid, dbm_signal, channel, crypto)
+
+#strcat(emptyStr, "mac: ");
+#    strcat(emptyStr, network.StationMac.c_str());
+#    strcat(emptyStr, "power: 0");
+#    strcat(emptyStr, "packetCount: 0");
+#    strcat(emptyStr, "bssid: ");
+#    strcat(emptyStr, network.BSSID.c_str());
+#    strcat(emptyStr, "essid: ");
+#    strcat(emptyStr, network.SSID.c_str());
 
 def change_channel():
     '''
