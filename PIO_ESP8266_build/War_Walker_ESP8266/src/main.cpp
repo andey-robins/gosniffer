@@ -35,7 +35,7 @@ See more at http://blog.squix.ch
 #include <Ticker.h>
 #include <JsonListener.h>
 #include "Wire.h"
-//#include "TimeClient.h"
+#include "TimeClient.h"
 
 //the structure
 class Network {
@@ -131,7 +131,7 @@ void POST(Network network) {
 
     //int stationmaclen = network.StationMac.length() + 1; // Add one for the empty string we'll concat with
 
-    char emptyStr[] = "";
+    char emptyStr[255];
  
     strcat(emptyStr, "mac: ");
     strcat(emptyStr, network.StationMac.c_str());
@@ -157,6 +157,11 @@ void POST(Network network) {
   }
  
   delay(30000);  //Send a request every 30 seconds
+}
+
+void setup()
+{
+
 }
 
 void loop()
